@@ -1,0 +1,38 @@
+
+
+<div class="logout-container">
+  <button class="logout-button" (click)="logout()">🚪 Quitter</button>
+</div>
+
+<div class="background-blur"></div>
+<div class="login-page">
+  <div class="login-container">
+    <h1>S'inscrire</h1>
+
+    <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+  <label>Nom</label>
+  <input type="text" [(ngModel)]="etudiant.nomEt" name="nomEt" required />
+
+  <label>Prénom</label>
+  <input type="text" [(ngModel)]="etudiant.prenomEt" name="prenomEt" required />
+
+  <label>CIN</label>
+  <input type="number" [(ngModel)]="etudiant.cin" name="cin" required />
+
+  <label>École</label>
+  <input type="text" [(ngModel)]="etudiant.ecole" name="ecole" required />
+
+  <label>Date de naissance</label>
+  <input type="date" [(ngModel)]="etudiant.dateNaissance" name="dateNaissance" required />
+
+  <label>Email</label>
+  <input type="email" [(ngModel)]="etudiant.email" name="email" required />
+
+  <label>Mot de passe</label>
+  <input type="password" [(ngModel)]="etudiant.password" name="password" required />
+
+  <button type="submit" [disabled]="!signupForm.form.valid">S'inscrire</button>
+</form>
+
+  </div>
+</div>

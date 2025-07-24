@@ -1,0 +1,18 @@
+<p>dashboard works!</p>
+<div class="dashboard">
+  <h2>📊 Tableau de bord</h2>
+  <div class="stats">
+    <div class="card">👨‍🎓 Étudiants : {{ dashboardData?.totalStudents }}</div>
+    <div class="card">🛏️ Réservations : {{ dashboardData?.totalReservations }}</div>
+    <div class="card">🏠 Chambres disponibles : {{ dashboardData?.availableRooms }}</div>
+  </div>
+
+  <div class="upcoming">
+    <h3>📅 Réservations à venir</h3>
+    <ul>
+      <li *ngFor="let res of dashboardData?.upcomingReservations">
+        {{ res.dateDebut | date:'dd/MM/yyyy' }} - Chambre {{ res.chambre.idChambre }} (Étudiant ID: {{ res.etudiant.idEtudiant }})
+      </li>
+    </ul>
+  </div>
+</div>

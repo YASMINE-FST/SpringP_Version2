@@ -1,0 +1,95 @@
+<div class="page-container">
+  <h1>Gestion des Chambres</h1><br>
+
+   <h2>{{ modeEdition ? 'Modifier le Foyer' : 'Ajouter un Foyer' }}</h2>
+
+  <form (ngSubmit)="addOuModifierChambre()" class="form-chambre">
+    <div class="form-group">
+      <label for="foyer">Foyer :</label>
+      <select id="foyer" [(ngModel)]="idFoyer" name="idFoyer" required (change)="idBloc = undefined; mettreAJourBlocsFiltres()">
+        <option [ngValue]="null" disabled>-- Sélectionner un foyer --</option>
+        <option *ngFor="let f of foyers" [ngValue]="f.idFoyer">{{ f.nomFoyer }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="bloc">Bloc :</label>
+      <select id="bloc" [(ngModel)]="idBloc" name="idBloc" required>
+  <option [ngValue]="null" disabled>-- Sélectionner un bloc --</option>
+  <option *ngFor="let b of blocsFiltres" [ngValue]="b.idBloc">
+    {{ b.nomBloc }} (Capacité: {{ b.capaciteBloc }})
+  </option>
+</select>
+
+
+    </div>
+
+    <div class="form-group">
+      <label for="typeC">Type de chambre :</label>
+      <select id="typeC" [(ngModel)]="typeC" name="typeC" required>
+        <option value="simple">Simple</option>
+        <option value="double">Double</option>
+        <option value="triple">Triple</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="nombreChambres">Nombre de chambres :</label>
+      <input
+        type="number"
+        id="nombreChambres"
+        [(ngModel)]="nombreChambres"
+        name="nombreChambres"
+        required
+        min="1"
+      />
+    </div>
+
+    <div class="form-buttons">
+      <button type="submit">{{ modeEdition ? 'Modifier' : 'Ajouter' }}</button>
+      <button type="button" class="cancel-button" (click)="clearForm()">Annuler</button>
+    </div>
+  </form>
+
+  <!-- Affichage des erreurs -->
+  <div *ngFor="let blocId of getErreursCapaciteKeys()" class="alert-error">
+    {{ erreursCapacite[blocId] }}
+  </div>
+
+  <!-- Tableau -->
+  <table class="table-chambres">
+    <thead>
+      <tr>
+        <th>Bloc</th>
+        <th>Foyer</th>
+        <th>Type</th>
+        <th>Nombre de chambres</th>
+        <th>Capacité occupée</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+<tbody>
+  <ng-container *ngFor="let groupe of groupesParBloc">
+    <ng-container *ngFor="let type of types">
+      <tr *ngIf="getGroupeType(type, groupe).nombre > 0">
+        <td>{{ groupe.bloc.nomBloc }}</td>
+        <td>{{ getNomFoyer(groupe.bloc.idFoyer) }}</td>
+        <td class="capitalize">{{ type.toLowerCase() }}</td>
+        <td>{{ getGroupeType(type, groupe).nombre }}</td>
+        <td>{{ getGroupeType(type, groupe).capacite }}</td>
+        <td>
+          <button (click)="modifierChambre(getGroupeType(type, groupe).chambres[0])">
+            <i class="fa fa-pencil-square"></i> Modifier
+          </button>
+          <button class="delete" (click)="supprimerChambre(getGroupeType(type, groupe).chambres[0].idChambre!)">
+            <i class="fa fa-trash"></i> Supprimer
+          </button>
+        </td>
+      </tr>
+    </ng-container>
+  </ng-container>
+</tbody>
+
+
+  </table>
+</div>

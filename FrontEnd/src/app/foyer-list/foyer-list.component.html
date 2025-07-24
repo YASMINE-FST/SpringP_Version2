@@ -1,0 +1,67 @@
+<div class="page-container">
+  <!-- Section Formulaire -->
+  <div class="form-card">
+    <h2>{{ modeEdition ? 'Modifier un Foyer' : 'Ajouter un Foyer' }}</h2>
+    <form (ngSubmit)="onSubmit()" #foyerForm="ngForm">
+      <div class="form-group">
+        <label for="nomFoyer"><i class="fa fa-home"></i> Nom du Foyer</label>
+        <input
+          id="nomFoyer"
+          type="text"
+          [(ngModel)]="nouveauFoyer.nomFoyer"
+          name="nomFoyer"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="capaciteFoyer">👥 Capacité</label>
+        <input
+          id="capaciteFoyer"
+          type="number"
+          [(ngModel)]="nouveauFoyer.capaciteFoyer"
+          name="capaciteFoyer"
+          required
+          min="1"
+        />
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="animate-button" [disabled]="!foyerForm.form.valid">
+          {{ modeEdition ? 'Mettre à jour' : 'Ajouter' }}
+        </button>
+        <button type="button" class="cancel-button" (click)="resetForm()">Annuler</button>
+      </div>
+    </form>
+  </div>
+<br><br><br><br>
+  <!-- Section Tableau -->
+  <div class="table-card">
+    <h2>nos Foyers</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Capacité</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let foyer of foyers" >
+          <td>{{ foyer.idFoyer }}</td>
+          <td>{{ foyer.nomFoyer }}</td>
+          <td>{{ foyer.capaciteFoyer }}</td>
+          <td style="text-align: center;">
+            <button (click)="modifierFoyer(foyer)">
+              <i class="fa fa-pencil-square"></i> Modifier
+            </button>
+            <button class="delete" (click)="supprimerFoyer(foyer.idFoyer)">
+              <i class="fa fa-trash"></i> Supprimé
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

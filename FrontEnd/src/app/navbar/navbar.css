@@ -1,0 +1,65 @@
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 210px;
+  height: 100vh;
+  background-color: rgba(27, 113, 165, 0.754); /* bleu avec 70% d’opacité */
+  padding-top: 20px;
+  color: white;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+  backdrop-filter: blur(10px); /* effet flou derrière */
+  -webkit-backdrop-filter: blur(10px); /* pour Safari */
+  z-index: 1000;
+}
+
+/* App name / brand */
+.brand {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0 20px;
+  margin-bottom: 40px;
+}
+
+.brand i {
+  margin-right: 10px;
+}
+
+/* Navigation links */
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li {
+  margin-bottom: 15px;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+}
+
+.nav-links a i {
+  margin-right: 10px;
+}
+
+.nav-links a:hover {
+  background-color:  rgba(59, 130, 246, 0.7);
+  border-left: 4px solid #00c0ff;
+}
+
+.nav-links a.active-link {
+  background-color: rgba(112, 185, 234, 0.9); /* Un peu plus foncé */
+  border-left: 4px solid #ffffff; /* Ligne blanche à gauche */
+  font-weight: bold;
+}

@@ -1,0 +1,20 @@
+<nav class="sidebar">
+  <div class="brand">
+    <i class="fas fa-university"></i>
+    <span>FoyerApp</span>
+  </div>
+
+
+  <br><br>
+
+<ul class="nav-links">
+  <li *ngIf="isAdmin()"><a routerLink="/foyer" routerLinkActive="active-link">Foyers</a></li>
+  <li *ngIf="isAdmin()"><a routerLink="/Blocs" routerLinkActive="active-link">Blocs</a></li>
+  <li *ngIf="isAdmin()"><a routerLink="/Chambres" routerLinkActive="active-link">Chambres</a></li>
+
+  <li><a routerLink="/reservations" routerLinkActive="active-link">Réservations</a></li>
+
+  <li><a (click)="logout()" style="cursor:pointer"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
+
+</ul>
+

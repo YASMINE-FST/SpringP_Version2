@@ -1,0 +1,194 @@
+<div class="page-container">
+
+  <!-- ============================ -->
+  <!-- 🎓 ÉTUDIANT - FORMULAIRE -->
+  <!-- ============================ -->
+  <div *ngIf="!isAdmin">
+    <section class="form-section">
+      <h2>Réserver une chambre</h2>
+      <form #reservationForm="ngForm" (ngSubmit)="confirmerReservation()">
+        <!-- Foyer -->
+        <div class="form-group">
+          <label>Foyer</label>
+          <select [(ngModel)]="reservation.idFoyer" name="idFoyer" required (change)="onFoyerChange()">
+            <option [ngValue]="null">-- Choisir un foyer --</option>
+            <option *ngFor="let foyer of foyers" [value]="foyer.idFoyer">{{ foyer.nomFoyer }}</option>
+          </select>
+        </div>
+
+        <!-- Bloc -->
+        <div class="form-group">
+          <label>Bloc</label>
+          <select [(ngModel)]="reservation.idBloc" name="idBloc" required [disabled]="!blocs.length" (change)="loadBlocReservations()">
+            <option [ngValue]="null">-- Choisir un bloc --</option>
+            <option *ngFor="let bloc of blocs" [value]="bloc.idBloc">{{ bloc.nomBloc }}</option>
+          </select>
+        </div>
+
+        <!-- Type -->
+        <div class="form-group">
+          <label>Type de chambre</label>
+          <select [(ngModel)]="reservation.typeC" name="typeC" required>
+            <option [ngValue]="null">-- Choisir un type --</option>
+            <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <!-- Dates -->
+        <div class="form-group">
+          <label>Date début</label>
+          <input type="date" [(ngModel)]="reservation.dateDebut" name="dateDebut" required />
+        </div>
+        <div class="form-group">
+          <label>Date fin</label>
+          <input type="date" [(ngModel)]="reservation.dateFin" name="dateFin" required />
+        </div>
+
+        <!-- Actions -->
+        <div class="form-buttons">
+          <button type="button" (click)="chercherChambre()">🔍 Chercher</button>
+          <button type="submit" [disabled]="!chambreDisponible">🗃️ Réserver</button>
+        </div>
+
+        <!-- Résultat de disponibilité -->
+        <div *ngIf="chambreDisponible" class="info-box">
+          ✅ Chambre dispo : numéro {{ chambreDisponible.numeroChambre }} ({{ chambreDisponible.typeC }})<br />
+          Capacité : {{ getReservationCountForChambre() }}/{{ chambreDisponible.capacite }}
+        </div>
+      </form>
+    </section>
+
+    <!-- ============================ -->
+    <!-- 📋 MES RÉSERVATIONS -->
+    <!-- ============================ -->
+    <section class="table-section">
+      <h2>Mes Réservations</h2>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Foyer</th>
+              <th>Bloc</th>
+              <th>Chambre</th>
+              <th>Type</th>
+              <th>Date Début</th>
+              <th>Date Fin</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let res of mesReservations">
+              <td>{{ res.foyerNom || 'N/A' }}</td>
+              <td>{{ res.blocNom || 'N/A' }}</td>
+              <td>{{ res.chambreId }}</td>
+              <td>{{ res.typeChambre }}</td>
+              <td>{{ res.dateDebut | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ res.dateFin | date: 'dd/MM/yyyy' }}</td>
+              <td [ngClass]="{
+                    'badge badge-warning': res.statut === 'EN_ATTENTE',
+                    'badge badge-success': res.statut === 'VALIDE',
+                    'badge badge-danger': res.statut === 'REFUSE'
+                  }">
+                {{
+                  res.statut === 'EN_ATTENTE'
+                    ? '⏳ En attente'
+                    : res.statut === 'VALIDE'
+                    ? '✅ Validée'
+                    : '❌ Refusée'
+                }}
+              </td>
+            </tr>
+            <tr *ngIf="mesReservations.length === 0">
+              <td colspan="7" class="no-data">Aucune réservation trouvée</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================ -->
+  <!-- 👨‍💼 ADMIN - GESTION -->
+  <!-- ============================ -->
+  <div *ngIf="isAdmin">
+    <h2>Liste des réservations</h2>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Étudiant</th>
+            <th>Email</th>
+            <th>Foyer</th>
+            <th>Bloc</th>
+            <th>Chambre</th>
+            <th>Type</th>
+            <th>Date Début</th>
+            <th>Date Fin</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let r of toutesReservations">
+            <tr>
+              <td>{{ r.etudiantNom }}</td>
+              <td>{{ r.etudiantEmail }}</td>
+              <td>{{ r.foyerNom }}</td>
+              <td>{{ r.blocNom }}</td>
+              <td>{{ r.chambreId }}</td>
+              <td>{{ r.typeChambre }}</td>
+              <td>{{ r.dateDebut | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ r.dateFin | date: 'dd/MM/yyyy' }}</td>
+              <td [ngClass]="{
+                    'badge badge-warning': r.statut === 'EN_ATTENTE',
+                    'badge badge-success': r.statut === 'VALIDE',
+                    'badge badge-danger': r.statut === 'REFUSE'
+                  }">
+                {{
+                  r.statut === 'EN_ATTENTE'
+                    ? '⏳ En attente'
+                    : r.statut === 'VALIDE'
+                    ? '✅ Validée'
+                    : '❌ Refusée'
+                }}
+              </td>
+              <td>
+                <button (click)="changerStatut(r.idReservation, 'VALIDE')" [disabled]="r.statut !== 'EN_ATTENTE'">✔️ Valider</button>
+                <button (click)="changerStatut(r.idReservation, 'REFUSE')" [disabled]="r.statut !== 'EN_ATTENTE'">❌ Refuser</button>
+                <button (click)="editReservation(r)" [disabled]="r.statut === 'VALIDE'">✏️ Modifier</button>
+                <button (click)="annulerReservation(r.idReservation)">🗑️ Supprimer</button>
+              </td>
+            </tr>
+
+            <!-- Ligne de modification -->
+            <tr *ngIf="editingReservation?.idReservation === r.idReservation">
+              <td colspan="10">
+                <form (ngSubmit)="updateReservation()" class="edit-form-row">
+                  <label>Type</label>
+                  <select [(ngModel)]="editingReservation.typeC" name="typeC" required>
+                    <option value="SIMPLE">SIMPLE</option>
+                    <option value="DOUBLE">DOUBLE</option>
+                    <option value="TRIPLE">TRIPLE</option>
+                  </select>
+
+                  <label>Date Début</label>
+                  <input type="date" [(ngModel)]="editingReservation.dateDebut" name="dateDebut" required />
+
+                  <label>Date Fin</label>
+                  <input type="date" [(ngModel)]="editingReservation.dateFin" name="dateFin" required />
+
+                  <button type="submit">💾 Enregistrer</button>
+                  <button type="button" (click)="closeEditModal()">❌ Annuler</button>
+                </form>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngIf="toutesReservations.length === 0">
+            <td colspan="10" class="no-data">Aucune réservation trouvée</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

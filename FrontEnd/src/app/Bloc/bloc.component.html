@@ -1,0 +1,68 @@
+<div class="page-container">
+  <!-- Form Section -->
+  <div class="form-card">
+    <h1>Gestion des blocs </h1>
+    <br>
+    <h2>{{ modeEdition ? 'Modifier un Bloc' : 'Ajouter un Bloc' }}</h2>
+<form (ngSubmit)="onSubmitBloc()" #blocForm="ngForm">
+  <div class="form-group">
+    <label>Nom du Bloc</label>
+    <input type="text" [(ngModel)]="nouveauBloc.nomBloc" name="nomBloc" required />
+  </div>
+
+  <div class="form-group">
+    <label>Capacité</label>
+    <input type="number" [(ngModel)]="nouveauBloc.capaciteBloc" name="capaciteBloc" required />
+  </div>
+
+  <div class="form-group">
+    <label>Foyer</label>
+    <select [(ngModel)]="nouveauBloc.foyer" name="foyer" required>
+      <option [ngValue]="null" disabled>-- Sélectionner un foyer --</option>
+      <option *ngFor="let foyer of foyers" [ngValue]="foyer">
+        {{ foyer.nomFoyer }} (Capacité: {{ foyer.capaciteFoyer }})
+      </option>
+    </select>
+  </div>
+
+  <div class="form-buttons">
+    <button type="submit" [disabled]="!blocForm.form.valid">
+      {{ modeEdition ? '✅ Mettre à jour' : 'Ajouter' }}
+    </button>
+    <button type="button" (click)="resetBlocForm()" class="cancel-button">Annuler</button>
+  </div>
+</form>
+
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-card">
+    <h2> Blocs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+        
+          <th>Nom bloc</th>
+          <th>Foyer</th>
+          <th>Capacité</th>
+          
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bloc of blocs">
+          <td data-label="ID">{{ bloc.idBloc }}</td>
+          <td data-label="Nom">{{ bloc.nomBloc }}</td>
+          <td data-label="Foyer">{{ bloc.nomFoyer || '—' }}</td>
+          <td data-label="Capacité">{{ bloc.capaciteBloc }}</td>
+         
+          <td data-label="Actions" style="text-align: center;">
+            <button (click)="modifierBloc(bloc)" class="modify"><i class="fa fa-pencil-square"></i>  Modifier</button>
+            <button (click)="supprimerBloc(bloc.idBloc)" class="delete"><i class="fa fa-trash"></i>  Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
