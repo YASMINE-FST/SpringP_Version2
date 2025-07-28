@@ -174,3 +174,15 @@ button[type="submit"]:disabled {
 .logout-button:active {
   transform: scale(0.95);
 }
+
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 5px;
+}
+.success-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}

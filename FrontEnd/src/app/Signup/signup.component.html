@@ -25,13 +25,28 @@
   <label>Date de naissance</label>
   <input type="date" [(ngModel)]="etudiant.dateNaissance" name="dateNaissance" required />
 
-  <label>Email</label>
-  <input type="email" [(ngModel)]="etudiant.email" name="email" required />
+<label>Email</label>
+<input
+  type="email"
+  [(ngModel)]="etudiant.email"
+  name="email"
+  required
+  (blur)="checkEmail()" />
+
+<div *ngIf="emailExists" class="error-message">
+  ❌ Cet email est déjà utilisé. Veuillez en choisir un autre.
+</div>
+
 
   <label>Mot de passe</label>
   <input type="password" [(ngModel)]="etudiant.password" name="password" required />
 
-  <button type="submit" [disabled]="!signupForm.form.valid">S'inscrire</button>
+<button type="submit" [disabled]="!signupForm.form.valid || emailExists">S'inscrire</button>
+<div *ngIf="signupSuccessMessage" class="success-message">
+  {{ signupSuccessMessage }}
+</div>
+
+
 </form>
 
   </div>

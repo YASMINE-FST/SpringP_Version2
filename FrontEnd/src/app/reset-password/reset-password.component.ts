@@ -26,6 +26,9 @@ export class ResetPasswordComponent {
   ) {}
 
 
+  goToLogin() {
+    this.router.navigate(['/login']); // ajuste le chemin selon ta route login
+  }
 sendCode() {
   this.authService.sendResetCode(this.email).subscribe({
     next: (res) => {
@@ -35,7 +38,9 @@ sendCode() {
     },
     error: (err) => {
       console.error("Erreur lors de l'envoi:", err);
-      this.showMessage("Erreur lors de l'envoi de l'email", true);
+      // Si backend renvoie un message précis sur email non trouvé, on l'affiche
+      const errorMsg = err?.error?.error || "Erreur lors de l'envoi de l'email";
+      this.showMessage(errorMsg, true);
     }
   });
 }

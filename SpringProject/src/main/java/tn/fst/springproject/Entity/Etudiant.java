@@ -64,4 +64,8 @@ public class Etudiant {
     @Column(name = "reset_code_expiry")
     private Date resetCodeExpiry;
 
+    private boolean enabled = false;
+    private String confirmationToken;
+
+
 }

@@ -1,4 +1,4 @@
-package tn.fst.springproject.Controller; // attention à la casse !
+package tn.fst.springproject.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import tn.fst.springproject.Entity.Etudiant;
 import tn.fst.springproject.Service.EtudiantService;
+import tn.fst.springproject.auth.EmailService;
 import tn.fst.springproject.dto.LoginRequestDTO;
 import tn.fst.springproject.dto.LoginResponseDTO;
 import tn.fst.springproject.dto.SignupRequestDTO;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/etudiants")
@@ -19,9 +22,20 @@ public class EtudiantController {
 
     @Autowired
     private EtudiantService etudiantService;
+    @Autowired
+    private EmailService emailService;
+
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
-    public Etudiant signup(@RequestBody SignupRequestDTO signupRequest) {
+    public ResponseEntity<?> signup(@RequestBody SignupRequestDTO signupRequest) {
+        if (etudiantService.findByEmail(signupRequest.getEmail()) != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Email déjà utilisé"));
+        }
+
         Etudiant etudiant = new Etudiant();
         etudiant.setNomEt(signupRequest.getNomEt());
         etudiant.setPrenomEt(signupRequest.getPrenomEt());
@@ -29,17 +43,36 @@ public class EtudiantController {
         etudiant.setEcole(signupRequest.getEcole());
         etudiant.setDateNaissance(signupRequest.getDateNaissance());
         etudiant.setEmail(signupRequest.getEmail());
-        etudiant.setPassword(signupRequest.getPassword());
-        return etudiantService.saveEtudiant(etudiant);
+        etudiant.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        etudiant.setEnabled(false);
+
+        // Token de confirmation
+        String token = java.util.UUID.randomUUID().toString();
+        etudiant.setConfirmationToken(token);
+
+        etudiantService.saveEtudiant(etudiant);
+
+        // Envoie de l'email
+        String confirmationUrl = "http://localhost:4200/confirm-email?token=" + token;
+        String subject = "Confirmation de votre inscription";
+        String body = "Bonjour " + etudiant.getNomEt()+etudiant.getPrenomEt() + ",\n\n"
+                + "Cliquez sur ce lien pour confirmer votre inscription :\n" + confirmationUrl;
+
+        emailService.sendSimpleMessage(etudiant.getEmail(), subject, body);
+
+        return ResponseEntity.ok(Map.of("message", "Un email de confirmation a été envoyé à " + etudiant.getEmail()));
     }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody Etudiant etudiant) {
-        Etudiant existing = etudiantService.findByEmail(etudiant.getEmail());
 
-        if (existing != null && passwordEncoder.matches(etudiant.getPassword(), existing.getPassword())) {
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
+        Etudiant existing = etudiantService.findByEmail(loginRequest.getEmail());
+
+        if (existing == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email ou mot de passe incorrect");
+        }
+        boolean matches = passwordEncoder.matches(loginRequest.getPassword(), existing.getPassword());
+        if (matches) {
             LoginResponseDTO dto = new LoginResponseDTO();
             dto.setId(existing.getId());
             dto.setEmail(existing.getEmail());
@@ -51,5 +84,27 @@ public class EtudiantController {
         }
     }
 
+    @GetMapping("/check-email")
+    public ResponseEntity<Map<String, Boolean>> checkEmailExists(@RequestParam String email) {
+        boolean exists = etudiantService.findByEmail(email) != null;
+        return ResponseEntity.ok(Map.of("exists", exists));
+    }
+
+
+
+
+@GetMapping("/confirm-email")
+public ResponseEntity<?> confirmEmail(@RequestParam String token) {
+    Etudiant etudiant = etudiantService.findByConfirmationToken(token);
+    if (etudiant == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Token invalide"));
+    }
+
+    etudiant.setEnabled(true);
+    etudiant.setConfirmationToken(null);
+    etudiantService.saveEtudiant(etudiant);
+
+    return ResponseEntity.ok(Map.of("message", "Inscription confirmée. Vous pouvez maintenant vous connecter."));
+}
 
 }

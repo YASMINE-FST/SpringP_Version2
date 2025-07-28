@@ -24,14 +24,14 @@ public class EtudiantService {
     @Autowired
     private EmailService emailService;
 
-
     public Etudiant saveEtudiant(Etudiant etudiant) {
-        etudiant.setRole("USER");
-        // Hachage du mot de passe AVANT d’enregistrer
-        String hashedPassword = passwordEncoder.encode(etudiant.getPassword());
-        etudiant.setPassword(hashedPassword);
+        if (etudiant.getRole() == null) {
+            etudiant.setRole("USER");
+        }
+        etudiant.setPassword(passwordEncoder.encode(etudiant.getPassword()));
         return etudiantRepository.save(etudiant);
     }
+
 
     public Etudiant findByEmail(String email) {
         return etudiantRepository.findByEmail(email);
@@ -76,5 +76,12 @@ public class EtudiantService {
         etudiant.setResetCodeExpiry(null);
         etudiantRepository.save(etudiant);
     }
+
+    public Etudiant findByConfirmationToken(String token) {
+        return etudiantRepository.findByConfirmationToken(token).orElse(null);
+    }
+
+
+
 
 }

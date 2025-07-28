@@ -9,6 +9,7 @@ import { ReservationComponent } from './reservations/reservation.component';
 import { ChambreComponent } from './ChambresComponent/chambre.component';
 import { BlocComponent } from './Bloc/bloc.component';
 import { DashboardComponent } from './dashboard/dashboard';
+import { ConfirmEmailComponent } from './confirm-email/confirm_email.component';
 export const routes: Routes = [
   {
     path: '',
@@ -18,6 +19,7 @@ export const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'signup', loadComponent: () => import('./Signup/signup.component').then(m => m.SignupComponent) },
       { path: 'reset-password', component: ResetPasswordComponent },
+       { path: 'confirm-email', component: ConfirmEmailComponent }
       
     ]
   },

@@ -2,6 +2,7 @@ package tn.fst.springproject.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.fst.springproject.Entity.Etudiant;
 import tn.fst.springproject.Entity.Foyer;
 import tn.fst.springproject.Repository.FoyerRepository;
 
@@ -39,5 +40,6 @@ public class FoyerService {
     }
 
 
-    // Ajoute d'autres méthodes selon tes besoins (update, delete, etc.)
+
+
 }

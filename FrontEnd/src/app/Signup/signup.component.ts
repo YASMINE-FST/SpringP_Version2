@@ -26,17 +26,51 @@ export class SignupComponent {
     role: 'USER'
   };
 
+  emailExists = false;
+  isSubmitting = false;
+  signupSuccessMessage: string | null = null;
+
   constructor(private etudiantService: EtudiantService, private router: Router) {}
 
   onSubmit() {
+    if (this.isSubmitting) return;
+
+    this.isSubmitting = true;
     this.etudiantService.signup(this.etudiant).subscribe({
       next: () => {
-        alert('Inscription réussie !');
-        this.router.navigate(['/login']);
+        this.signupSuccessMessage = `Un email de confirmation a été envoyé à ${this.etudiant.email}. Veuillez vérifier votre boîte mail pour confirmer votre inscription.`;
+        this.isSubmitting = false;
+        this.etudiant = {
+          nomEt: '',
+          prenomEt: '',
+          cin: 0,
+          ecole: '',
+          dateNaissance: '',
+          email: '',
+          password: '',
+          role: 'USER'
+        };
+        this.emailExists = false;
       },
       error: (err: any) => {
-        alert('Erreur lors de l\'inscription');
+        alert('Erreur lors de l\'inscription : ' + (err.error?.error || 'Erreur inconnue'));
         console.error(err);
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+  checkEmail() {
+    if (!this.etudiant.email) {
+      this.emailExists = false;
+      return;
+    }
+    this.etudiantService.checkEmail(this.etudiant.email).subscribe({
+      next: (res) => {
+        this.emailExists = res.exists;
+      },
+      error: () => {
+        this.emailExists = false;
       }
     });
   }
