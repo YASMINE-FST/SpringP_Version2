@@ -5,13 +5,11 @@ import org.springframework.stereotype.Service;
 import tn.fst.springproject.Entity.Chambre;
 import tn.fst.springproject.Entity.Etudiant;
 import tn.fst.springproject.Repository.ChambreRepository;
-import tn.fst.springproject.Repository.EtudiantRepository;
-import tn.fst.springproject.Reservation.ReservationRepository;
+import tn.fst.springproject.User.EtudiantRepository;
 import tn.fst.springproject.Entity.TypeChambre;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 

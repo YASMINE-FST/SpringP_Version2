@@ -122,4 +122,11 @@ private handleLoginSuccess(response: any): void {
       this.loginSubscription.unsubscribe();
     }
   }
+
+  showPassword = false ;
+
+togglePasswordVisibility() {
+  this.showPassword = !this.showPassword;
+}
+
 }

@@ -1,4 +1,5 @@
 <div class="background-blur"></div>
+<div class="background-gradient"></div>
 
 <div class="login-page">
   <div class="login-container">
@@ -9,49 +10,54 @@
       <h1 class="login-title">Connectez-vous</h1>
     </div>
 
-    <!-- Message d'erreur ou de succès -->
-    <div *ngIf="message" 
-         [ngClass]="{ 'error-message': isError, 'success-message': !isError }" 
+    <div *ngIf="message"
+         [ngClass]="{ 'error-message': isError, 'success-message': !isError }"
          class="message-box">
       {{ message }}
       <span class="close-icon" (click)="message = ''">×</span>
     </div>
 
     <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-      <div class="form-group input-icon">
+      <div class="form-group floating-label input-icon">
         <input
+          id="email"
           type="email"
-          class="form-input"
+          required
           [(ngModel)]="email"
           name="email"
-          required
-          placeholder="Email"
-          aria-label="Email"
-        />
+          placeholder=" "
+          aria-label="Email" />
+        <label for="email">Email</label>
         <i class="fas fa-envelope"></i>
       </div>
 
-      <div class="form-group input-icon">
+      <div class="form-group floating-label input-icon password-field">
         <input
-          type="password"
-          class="form-input"
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          required
           [(ngModel)]="password"
           name="password"
-          required
-          placeholder="Password"
-          aria-label="Password"
-        />
-        <i class="fas fa-lock"></i>
+          placeholder=" "
+          aria-label="Mot de passe" />
+        <label for="password">Mot de passe</label>
+
+
       </div>
+      
+      <button type="button" class="toggle-password" (click)="togglePasswordVisibility()" tabindex="-1" aria-label="Afficher/Masquer le mot de passe">
+      <i [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword" class="fas"></i>
+      </button>
 
       <div class="login-options">
         <label class="remember-me">
-
-          <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe"> Remember me</label>
+          <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe" />
+          Remember me
+        </label>
         <a href="#" class="forgot-password" (click)="forgotPassword($event)">Forgot Password?</a>
       </div>
 
-      <button 
+      <button
         type="submit"
         class="submit-btn"
         [disabled]="!loginForm.form.valid || loading">
@@ -60,15 +66,8 @@
       </button>
     </form>
 
-    <div class="social-login">
-      <p class="divider"><span>OR</span></p>
-      <button class="google-btn" (click)="loginWithGoogle()">
-        <i class="fab fa-google"></i> Continue with Google
-      </button>
-    </div>
-
     <p class="signup-link">
-      Don't have an account? 
+      Don't have an account?
       <a [routerLink]="['/signup']">Sign up</a>
     </p>
   </div>

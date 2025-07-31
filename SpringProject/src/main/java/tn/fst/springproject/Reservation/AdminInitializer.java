@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import tn.fst.springproject.Entity.Etudiant;
-import tn.fst.springproject.Repository.EtudiantRepository;
+import tn.fst.springproject.User.EtudiantRepository;
 
 import java.text.SimpleDateFormat;
 
@@ -30,6 +30,7 @@ public class AdminInitializer {
             admin.setPassword(passwordEncoder.encode("admin123")); // mot de passe hashé
             admin.setEcole("FST");
             admin.setRole("ADMIN");
+            admin.setEnabled(true);
 
             try {
                 admin.setDateNaissance(new SimpleDateFormat("yyyy-MM-dd").parse("1990-01-01"));

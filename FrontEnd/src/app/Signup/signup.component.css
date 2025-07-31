@@ -1,4 +1,6 @@
-/* Reset global */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
 * {
   margin: 0;
   padding: 0;
@@ -7,182 +9,244 @@
 
 body, html {
   height: 100%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #e0eafc, #cfdef3);
+  overflow-x: hidden;
+  color: #333;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Arrière-plan flou avec saturation */
 .background-blur {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('Foyer_S.A._Group_Luxembourg_-_Side_-_July_2012.jpg') no-repeat center center;
+  background: url('foyer.jpg') no-repeat center center;
   background-size: cover;
-  filter: blur(8px) saturate(1.2);
-  z-index: -1;
-  transform: scale(1.02);
+  filter: blur(6px) brightness(0.8);
+  z-index: -3;
+  transform: scale(1.05);
 }
 
-/* Centrage */
+.background-gradient {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: saturate(180%) blur(8px);
+  z-index: -2;
+}
+
 .login-page {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 20px;
+  animation: fadeInPage 0.7s ease forwards;
 }
 
-/* Boîte du formulaire */
-.login-container {
-  width: 100%;
-  max-width: 500px;
-  background-color: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Animation d'entrée */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Label et champs */
+.login-container {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffffcc; /* semi-transparent white */
+  border-radius: 14px;
+  padding: 40px 36px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+  backdrop-filter: saturate(180%) blur(12px);
+  transition: box-shadow 0.3s ease;
+  position: relative;
+}
+
+.login-container:hover {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.login-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 30px;
+  user-select: none;
+  text-align: center;
+}
+
+/* Labels and inputs */
 label {
   display: block;
-  margin-bottom: 5px;
-  color: #333;
-  font-weight: 500;
-  margin-top: 15px;
+  margin-bottom: 6px;
+  color: #475569;
+  font-weight: 600;
+  font-size: 14px;
+  user-select: none;
   cursor: text;
   transition: color 0.3s ease;
 }
 
-input {
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="date"] {
   width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-/* Focus input */
-input:focus {
-  border-color: #4285f4;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.3);
-}
-
-/* Si tu utilises des placeholders et veux que label change au focus ou saisie */
-/* input:focus + label,
-input:not(:placeholder-shown) + label {
-  color: #4285f4;
-} */
-
-/* Bouton */
-button[type="submit"] {
-  width: 100%;
-  padding: 12px;
-  background-color: #4285f4;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 25px;
-  transition: all 0.3s ease;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1.4px solid #cbd5e1;
+  background-color: #f8fafc;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1e293b;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   box-shadow: none;
 }
 
-/* Bouton hover */
-button[type="submit"]:hover {
-  background-color: #3367d6;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 15px rgba(51, 103, 214, 0.4);
-}
-
-/* Bouton focus accessible */
-button[type="submit"]:focus-visible {
+input:focus {
   outline: none;
-  animation: pulse 1.2s infinite ease-in-out;
+  border-color: #4066c7;
+  box-shadow: 0 0 6px rgba(64, 102, 199, 0.35);
+  background-color: white;
 }
 
-/* Animation pulse au focus */
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.7); }
-  50% { box-shadow: 0 0 15px 6px rgba(66, 133, 244, 0.3); }
+/* Button style (submit) */
+button[type="submit"] {
+  width: 100%;
+  margin-top: 28px;
+  padding: 16px;
+  background-color: #4066c7;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  font-size: 17px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(64, 102, 199, 0.45);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+  user-select: none;
 }
 
-/* Bouton disabled */
+button[type="submit"]:hover:not(:disabled) {
+  background-color: #1e40af;
+  box-shadow: 0 8px 28px rgba(30, 64, 175, 0.6);
+  transform: translateY(-2px);
+}
+
+button[type="submit"]:active:not(:disabled) {
+  box-shadow: 0 5px 14px rgba(30, 64, 175, 0.5);
+  transform: translateY(0);
+}
+
 button[type="submit"]:disabled {
-  background-color: #ccc;
+  background-color: #9ca3af;
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
 }
 
-/* Messages d’erreur */
-.error-msg {
-  color: #e74c3c;
-  font-size: 0.85rem;
-  margin-top: 3px;
-  font-style: italic;
+/* Messages */
+.error-message {
+  margin-top: 5px;
+  color: #b91c1c;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.success-message {
+  margin-top: 12px;
+  color: #065f46;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* "Quitter" as a back arrow inside the form near the top */
+.logout-container {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+}
+
+.logout-button {
+  display: inline-flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: #4066c7;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 6px 10px;
+  user-select: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #e0e7ff; /* soft blue highlight */
+  color: #1e40af;
+}
+
+/* Left arrow icon before text */
+.logout-button::before {
+  content: '\2190'; /* Unicode left arrow */
+  margin-right: 8px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
   .login-container {
+    max-width: 90vw;
     padding: 30px 20px;
   }
 
-  .login-page {
-    padding: 10px;
+  .login-title {
+    font-size: 24px;
+  }
+
+  button[type="submit"] {
+    font-size: 16px;
+    padding: 14px;
   }
 }
 
-/* Bouton logout */
-.logout-container {
+
+.password-field {
+  position: relative; /* parent pour positionnement absolu */
+  display: inline-block; /* ou block selon layout */
+  width: 100%; /* s’adapte à l’input */
+}
+
+.password-field input {
   width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px 30px 0 30px;
+  padding-right: 35px; /* espace pour l’icône à droite */
+  box-sizing: border-box;
 }
 
-.logout-button {
-  background-color: #e74c3c;
-  color: white;
+/* bouton icône positionné à l’intérieur du champ input, à droite */
+.toggle-password {
+  position: absolute;
+  top: 65%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
   border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-weight: bold;
-  font-size: 15px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+  color: #4066c7;
+  font-size: 1.2rem;
+  padding: 0;
 }
 
-.logout-button:hover {
-  background-color: #c0392b;
-  transform: scale(1.05);
-}
-
-.logout-button:active {
-  transform: scale(0.95);
-}
-
-
-.error-message {
-  color: red;
-  font-weight: bold;
-  margin-top: 5px;
-}
-.success-message {
-  color: green;
-  font-weight: bold;
-  margin-top: 10px;
+.toggle-password:focus {
+  outline: none;
 }

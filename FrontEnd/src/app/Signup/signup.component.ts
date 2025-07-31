@@ -79,4 +79,11 @@ export class SignupComponent {
     localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }
+
+  showPassword = false;
+
+togglePasswordVisibility() {
+  this.showPassword = !this.showPassword;
+}
+
 }

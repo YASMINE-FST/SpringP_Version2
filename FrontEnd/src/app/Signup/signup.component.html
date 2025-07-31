@@ -1,53 +1,64 @@
-
-
-<div class="logout-container">
-  <button class="logout-button" (click)="logout()">🚪 Quitter</button>
-</div>
-
 <div class="background-blur"></div>
+<div class="background-gradient"></div>
+
 <div class="login-page">
   <div class="login-container">
-    <h1>S'inscrire</h1>
+    <div class="logout-container">
+      <button class="logout-button" (click)="logout()"></button>
+    </div>
+
+    <h1 class="login-title">S'inscrire</h1>
 
     <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
-  <label>Nom</label>
-  <input type="text" [(ngModel)]="etudiant.nomEt" name="nomEt" required />
+      <label for="nomEt">Nom</label>
+      <input type="text" id="nomEt" name="nomEt" required [(ngModel)]="etudiant.nomEt" />
 
-  <label>Prénom</label>
-  <input type="text" [(ngModel)]="etudiant.prenomEt" name="prenomEt" required />
+      <label for="prenomEt">Prénom</label>
+      <input type="text" id="prenomEt" name="prenomEt" required [(ngModel)]="etudiant.prenomEt" />
 
-  <label>CIN</label>
-  <input type="number" [(ngModel)]="etudiant.cin" name="cin" required />
+      <label for="cin">CIN</label>
+      <input type="number" id="cin" name="cin" required [(ngModel)]="etudiant.cin" />
 
-  <label>École</label>
-  <input type="text" [(ngModel)]="etudiant.ecole" name="ecole" required />
+      <label for="ecole">École</label>
+      <input type="text" id="ecole" name="ecole" required [(ngModel)]="etudiant.ecole" />
 
-  <label>Date de naissance</label>
-  <input type="date" [(ngModel)]="etudiant.dateNaissance" name="dateNaissance" required />
+      <label for="dateNaissance">Date de naissance</label>
+      <input type="date" id="dateNaissance" name="dateNaissance" required [(ngModel)]="etudiant.dateNaissance" />
 
-<label>Email</label>
-<input
-  type="email"
-  [(ngModel)]="etudiant.email"
-  name="email"
-  required
-  (blur)="checkEmail()" />
+      <label for="email">Email</label>
+      <input 
+         type="email" 
+         id="email" 
+         name="email" 
+         required placeholder="yasmine@gmail.com"
+         [(ngModel)]="etudiant.email" 
+         (blur)="checkEmail()" />
 
-<div *ngIf="emailExists" class="error-message">
-  ❌ Cet email est déjà utilisé. Veuillez en choisir un autre.
-</div>
+      <div *ngIf="emailExists" class="error-message">
+        ❌ Cet email est déjà utilisé. Veuillez en choisir un autre.
+      </div>
 
+      <div class="form-group password-field">
+        <label for="password">Mot de passe</label>
+    <input
+      type="{{ showPassword ? 'text' : 'password' }}"
+      id="password"
+      name="password"
+      [(ngModel)]="etudiant.password"
+      required
+    />
+    
 
-  <label>Mot de passe</label>
-  <input type="password" [(ngModel)]="etudiant.password" name="password" required />
+    <button type="button" class="toggle-password" (click)="togglePasswordVisibility()" tabindex="-1" aria-label="Toggle password visibility">
+      <i [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword" class="fas"></i>
+    </button>
+  </div>
 
-<button type="submit" [disabled]="!signupForm.form.valid || emailExists">S'inscrire</button>
-<div *ngIf="signupSuccessMessage" class="success-message">
-  {{ signupSuccessMessage }}
-</div>
+  <button type="submit" [disabled]="!signupForm.form.valid || emailExists">S'inscrire</button>
 
-
-</form>
-
+      <div *ngIf="signupSuccessMessage" class="success-message">
+        {{ signupSuccessMessage }}
+      </div>
+    </form>
   </div>
 </div>

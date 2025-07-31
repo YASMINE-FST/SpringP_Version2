@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tn.fst.springproject.Entity.Etudiant;
-import tn.fst.springproject.Service.EtudiantService;
+import tn.fst.springproject.User.EtudiantService;
 
 import java.util.Map;
 import java.util.Random;
